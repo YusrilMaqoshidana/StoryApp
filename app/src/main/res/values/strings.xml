@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="user_name">Judul</string>
+    <string name="description">Deskripsi</string>
+    <string name="strory">Strory</string>
+    <string name="detail_story">Detail Story</string>
+    <string name="add_story">Add Story</string>
+    <string name="add_icon">add icon</string>
+    <string name="error_email">Email error does not match</string>
+    <string name="email">Email</string>
+    <string name="error_password">Error Password must be at least 8 characters</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="hai_login">Hai! 👋</string>
+    <string name="login_description">Welcome, Sign in to your account</string>
+    <string name="login_btn">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="register_welcome">Welcome! 🙌</string>
+    <string name="register_description">Create your new account and start a new adventure with us.</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="register_login">Login</string>
+    <string name="login_register">Register</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+</resources>
