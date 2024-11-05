@@ -10,9 +10,7 @@ import id.usereal.storyapp.data.remote.ApiConfig
 import id.usereal.storyapp.data.remote.ApiConfig.getApiService
 import id.usereal.storyapp.data.remote.ApiService
 
-class StoryRepository  private constructor(
-    private val apiService: ApiService
-) {
+class StoryRepository {
 
     fun getAllStory(token: String): LiveData<UiState<List<ListStoryItem>>> = liveData {
         emit(UiState.Loading)
@@ -28,10 +26,9 @@ class StoryRepository  private constructor(
     companion object {
         @Volatile
         private var instance: StoryRepository? = null
-
-        fun getInstance(apiService: ApiService): StoryRepository =
+        fun getInstance(): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService)
+                instance ?: StoryRepository()
             }.also { instance = it }
     }
 }

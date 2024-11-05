@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 object Injection {
-    fun provideStoryRepository(context: Context): StoryRepository {
-        val apiService = ApiConfig.getApiService("")
-        return StoryRepository.getInstance(apiService)
+    fun provideStoryRepository(): StoryRepository {
+        return StoryRepository.getInstance()
     }
     fun provideUserRepository(context: Context): UserRepository {
         val pref = UserPreference.getInstance(context.dataStore)

@@ -2,7 +2,7 @@
     <string name="app_name">StoryApp</string>
     <string name="user_name">Judul</string>
     <string name="description">Deskripsi</string>
-    <string name="strory">Strory</string>
+    <string name="story">Story</string>
     <string name="detail_story">Detail Story</string>
     <string name="add_story">Add Story</string>
     <string name="add_icon">add icon</string>

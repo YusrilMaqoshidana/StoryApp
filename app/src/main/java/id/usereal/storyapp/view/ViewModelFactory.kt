@@ -9,8 +9,8 @@ import id.usereal.storyapp.view.main.MainViewModel
 
 object ViewModelFactory {
     fun getInstance(context: Context) = viewModelFactory {
-        val storyRepository = provideStoryRepository(context)
         val userRepository = provideUserRepository(context)
+        val storyRepository = provideStoryRepository()
         initializer {
             MainViewModel(storyRepository, userRepository)
         }
