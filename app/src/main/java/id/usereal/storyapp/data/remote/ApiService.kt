@@ -1,13 +1,18 @@
 package id.usereal.storyapp.data.remote
 
 import id.usereal.storyapp.data.model.DetailResponse
+import id.usereal.storyapp.data.model.FileUploadResponse
 import id.usereal.storyapp.data.model.LoginResponse
 import id.usereal.storyapp.data.model.RegisterResponse
 import id.usereal.storyapp.data.model.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
@@ -26,10 +31,16 @@ interface ApiService {
         @Field("password") password: String
     ): LoginResponse
 
-
     @GET("stories")
     suspend fun getStories(): StoryResponse
 
     @GET("stories/{id}")
-    fun getDetailStory(@Path("id") id: String): DetailResponse
+    suspend fun getDetailStory(@Path("id") id: String): DetailResponse
+
+    @Multipart
+    @POST("stories")
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+    ): FileUploadResponse
 }

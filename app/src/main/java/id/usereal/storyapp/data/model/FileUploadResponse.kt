@@ -2,7 +2,7 @@ package id.usereal.storyapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class AddStoryResponse(
+data class FileUploadResponse(
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,

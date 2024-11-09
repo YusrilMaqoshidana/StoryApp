@@ -3,7 +3,6 @@
     <string name="user_name">Judul</string>
     <string name="description">Deskripsi</string>
     <string name="story">Story</string>
-    <string name="detail_story">Detail Story</string>
     <string name="add_story">Add Story</string>
     <string name="add_icon">add icon</string>
     <string name="error_email">Email error does not match</string>
@@ -21,4 +20,27 @@
     <string name="register_login">Login</string>
     <string name="login_register">Register</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="login_succes">Login Successfully</string>
+    <string name="register_succes">Register Successfully</string>
+    <string name="logout">Log out</string>
+    <string name="imagedetail">ImageDetail</string>
+    <string name="author_name">author name</string>
+    <string name="createdat">createdAt</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="uploud">Uploud</string>
+    <string name="error_description_null">Error cannot be empty</string>
+    <string name="empty_story">empty story</string>
+    <string name="stories_fetched_successfully">Stories fetched successfully</string>
+    <string name="error_fetching_stories">Error fetching stories: %1$s</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="story_id_not_found">Story ID not found</string>
+    <string name="failed_to_create_new_image_uri">Failed to create new image URI</string>
+    <string name="permission_request_granted">Permission request granted</string>
+    <string name="permission_request_denied">Permission request denied</string>
+    <string name="unable_to_create_image_uri">Unable to create image URI</string>
+    <string name="image_capture_failed">Image capture failed</string>
+    <string name="no_media_selected">No media selected</string>
+    <string name="error_getting_image_uri">Error getting image URI</string>
+
 </resources>

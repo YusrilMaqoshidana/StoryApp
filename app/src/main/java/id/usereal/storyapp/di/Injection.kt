@@ -3,7 +3,6 @@ package id.usereal.storyapp.di
 import android.content.Context
 import id.usereal.storyapp.data.local.UserPreference
 import id.usereal.storyapp.data.local.dataStore
-import id.usereal.storyapp.data.remote.ApiConfig
 import id.usereal.storyapp.data.remote.ApiConfig.getApiService
 import id.usereal.storyapp.data.repository.StoryRepository
 import id.usereal.storyapp.data.repository.UserRepository

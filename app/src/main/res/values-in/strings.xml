@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AplikasiCerita</string>
+    <string name="user_name">Judul</string>
+    <string name="description">Deskripsi</string>
+    <string name="story">Cerita</string>
+    <string name="add_story">Tambah Cerita</string>
+    <string name="add_icon">tambahkan ikon</string>
+    <string name="error_email">Email tidak sesuai</string>
+    <string name="email">Email</string>
+    <string name="error_password">Kata sandi harus minimal 8 karakter</string>
+    <string name="password">Kata Sandi</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="hai_login">Hai! 👋</string>
+    <string name="login_description">Selamat datang, masuk ke akun Anda</string>
+    <string name="login_btn">MASUK</string>
+    <string name="register">DAFTAR</string>
+    <string name="register_welcome">Selamat Datang! 🙌</string>
+    <string name="register_description">Buat akun baru Anda dan mulai petualangan baru bersama kami.</string>
+    <string name="already_have_an_account">Sudah punya akun?</string>
+    <string name="register_login">Masuk</string>
+    <string name="login_register">Daftar</string>
+    <string name="don_t_have_an_account">Belum punya akun?</string>
+    <string name="login_succes">Berhasil Masuk</string>
+    <string name="register_succes">Berhasil Mendaftar</string>
+    <string name="logout">Keluar</string>
+    <string name="imagedetail">Detail Gambar</string>
+    <string name="author_name">nama penulis</string>
+    <string name="createdat">dibuat pada</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="uploud">Unggah</string>
+    <string name="error_description_null">Tidak boleh kosong</string>
+    <string name="empty_story">cerita kosong</string>
+    <string name="stories_fetched_successfully">Cerita berhasil diambil</string>
+    <string name="error_fetching_stories">Kesalahan mengambil cerita: %1$s</string>
+    <string name="unknown_error">Kesalahan tidak diketahui</string>
+    <string name="story_id_not_found">ID Cerita tidak ditemukan</string>
+    <string name="failed_to_create_new_image_uri">Gagal membuat URI gambar baru</string>
+    <string name="permission_request_granted">Permintaan izin diterima</string>
+    <string name="permission_request_denied">Permintaan izin ditolak</string>
+    <string name="unable_to_create_image_uri">Tidak dapat membuat URI gambar</string>
+    <string name="image_capture_failed">Gagal menangkap gambar</string>
+    <string name="no_media_selected">Tidak ada media yang dipilih</string>
+    <string name="error_getting_image_uri">Kesalahan mendapatkan URI gambar</string>
+</resources>

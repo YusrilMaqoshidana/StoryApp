@@ -14,6 +14,7 @@
 
         <ImageView
             android:id="@+id/iv_item_photo"
+            android:transitionName="profile"
             tools:ignore="ContentDescription"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -24,20 +25,23 @@
 
         <TextView
             android:id="@+id/tv_item_name"
+            android:transitionName="name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/user_name"
-            android:textSize="20sp"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_item_photo" />
 
         <TextView
-            android:id="@+id/descriptionTextView"
+            android:id="@+id/tv_item_description"
+            android:transitionName="description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -46,7 +50,8 @@
             android:layout_marginBottom="16dp"
             android:maxLines="2"
             android:text="@string/description"
-            android:textSize="14sp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

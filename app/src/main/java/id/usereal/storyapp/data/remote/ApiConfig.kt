@@ -1,5 +1,6 @@
 package id.usereal.storyapp.data.remote
 
+import android.util.Log
 import id.usereal.storyapp.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -8,8 +9,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    const val BASE_URL = BuildConfig.BASE_URL
+    private const val BASE_URL = BuildConfig.BASE_URL
     fun getApiService(token: String): ApiService {
+        Log.d("ErrorDetail", "Base URL: $BASE_URL")
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val authInterceptor = Interceptor { chain ->
