@@ -59,7 +59,7 @@ class AddStoryActivity : AppCompatActivity() {
         setupToolbar()
         val token = intent.getStringExtra(DetailActivity.EXTRA_TOKEN)
         showImage()
-        with(binding){
+        with(binding) {
             btnGallery.setOnClickListener { startGallery() }
             btnCamera.setOnClickListener { startCamera() }
             buttonAdd.setOnClickListener { token?.let { it1 -> uploadImage(it1) } }
@@ -105,9 +105,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        if (viewModel.currentImageUri == null) {
-            viewModel.currentImageUri = getImageUri(this)
-        }
+        viewModel.currentImageUri = getImageUri(this)
         viewModel.currentImageUri?.let {
             launcherIntentCamera.launch(it)
         } ?: getString(R.string.unable_to_create_image_uri).showSnackbar()
@@ -140,7 +138,7 @@ class AddStoryActivity : AppCompatActivity() {
             val imageFile = uriToFile(uri, this).reduceFileImage()
             val description = binding.edAddDescription.text.toString()
 
-            if (description.isEmpty()){
+            if (description.isEmpty()) {
                 binding.edAddDescription.error = getString(R.string.error_description_null)
             } else {
                 viewModel.uploadImage(imageFile, description, token).observe(this) { result ->

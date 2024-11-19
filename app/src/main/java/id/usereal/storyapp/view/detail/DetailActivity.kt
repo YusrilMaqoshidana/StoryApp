@@ -53,15 +53,15 @@ class DetailActivity : AppCompatActivity() {
                 dateTextView.text = formatDate(story?.createdAt ?: "null")
             }
         }
-
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.tvDetailName.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.tvDetailDescription.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.ivDetailPhoto.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.dateTextView.visibility = if (isLoading) View.GONE else View.VISIBLE
+            with(binding){
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                tvDetailName.visibility = if (isLoading) View.GONE else View.VISIBLE
+                tvDetailDescription.visibility = if (isLoading) View.GONE else View.VISIBLE
+                ivDetailPhoto.visibility = if (isLoading) View.GONE else View.VISIBLE
+                dateTextView.visibility = if (isLoading) View.GONE else View.VISIBLE
+            }
         }
-
         viewModel.error.observe(this) { error ->
             showSnackbar(error ?: getString(R.string.unknown_error))
         }

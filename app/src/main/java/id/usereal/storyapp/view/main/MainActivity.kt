@@ -15,6 +15,7 @@ import id.usereal.storyapp.view.MainAdapter
 import id.usereal.storyapp.view.ViewModelFactory
 import id.usereal.storyapp.view.addStory.AddStoryActivity
 import id.usereal.storyapp.view.login.LoginActivity
+import id.usereal.storyapp.view.maps.MapsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -44,7 +45,10 @@ class MainActivity : AppCompatActivity() {
                 viewModel.logout()
                 true
             }
-
+            R.id.maps -> {
+                startActivity(Intent(this, MapsActivity::class.java))
+                true
+            }
             else -> {
                 super.onOptionsItemSelected(item)
             }
