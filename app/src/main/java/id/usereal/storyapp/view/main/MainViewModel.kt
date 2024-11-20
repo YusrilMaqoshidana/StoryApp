@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.model.UserModel
 import id.usereal.storyapp.data.repository.StoryRepository
 import id.usereal.storyapp.data.repository.UserRepository
@@ -20,7 +23,7 @@ class MainViewModel(private val storyRepository: StoryRepository, private val us
         }
     }
 
-    fun getAllStory(token: String) = storyRepository.getAllStory(token)
-
+    val stories: LiveData<PagingData<ListStoryItem>> =
+        storyRepository.getAllStories().cachedIn(viewModelScope)
 
 }

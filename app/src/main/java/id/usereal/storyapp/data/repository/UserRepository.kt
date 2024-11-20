@@ -3,7 +3,7 @@ package id.usereal.storyapp.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import id.usereal.storyapp.data.UiState
-import id.usereal.storyapp.data.local.UserPreference
+import id.usereal.storyapp.data.local.preference.UserPreference
 import id.usereal.storyapp.data.model.LoginResponse
 import id.usereal.storyapp.data.model.RegisterResponse
 import id.usereal.storyapp.data.model.UserModel

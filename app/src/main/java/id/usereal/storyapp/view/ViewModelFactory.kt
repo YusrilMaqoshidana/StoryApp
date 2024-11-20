@@ -47,7 +47,7 @@ class ViewModelFactory private constructor(
             return INSTANCE ?: synchronized(this) {
                 return@synchronized INSTANCE ?: ViewModelFactory(
                     userRepository = provideUserRepository(context),
-                    storyRepository = provideStoryRepository()
+                    storyRepository = provideStoryRepository(context)
                 ).also { INSTANCE = it }
             }
         }

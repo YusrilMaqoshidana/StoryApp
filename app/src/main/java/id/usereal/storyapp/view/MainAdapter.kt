@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import id.usereal.storyapp.view.detail.DetailActivity
 class MainAdapter(
     private val context: Context,
     private val token: String
-) : ListAdapter<ListStoryItem, MainAdapter.StoryViewHolder>(DIFF_CALLBACK) {
+) : PagingDataAdapter<ListStoryItem, MainAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
     inner class StoryViewHolder(private val binding: ItemCardStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -3,6 +3,7 @@ package id.usereal.storyapp.view.addStory
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -24,6 +25,7 @@ import id.usereal.storyapp.utils.reduceFileImage
 import id.usereal.storyapp.utils.uriToFile
 import id.usereal.storyapp.view.ViewModelFactory
 import id.usereal.storyapp.view.detail.DetailActivity
+import id.usereal.storyapp.view.main.MainActivity
 
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
@@ -92,6 +94,7 @@ class AddStoryActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
                 true
             }
@@ -180,6 +183,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun moveToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

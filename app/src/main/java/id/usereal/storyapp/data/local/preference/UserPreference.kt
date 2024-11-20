@@ -1,4 +1,4 @@
-package id.usereal.storyapp.data.local
+package id.usereal.storyapp.data.local.preference
 
 import android.content.Context
 import androidx.datastore.core.DataStore
