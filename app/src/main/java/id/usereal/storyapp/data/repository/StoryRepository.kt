@@ -1,5 +1,6 @@
 package id.usereal.storyapp.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
@@ -21,6 +22,18 @@ class StoryRepository {
         try {
             val response = getApiService(token).getStories()
             val stories = response.listStory
+            emit(UiState.Success(stories))
+        } catch (e: Exception) {
+            emit(UiState.Error(e.message.toString()))
+        }
+    }
+
+    fun getStoryWithLocation(token: String): LiveData<UiState<List<ListStoryItem>>> = liveData {
+        emit(UiState.Loading)
+        try {
+            val response = getApiService(token).getStoriesWithLocation()
+            val stories = response.listStory
+            Log.d("TestData", "Data: $stories")
             emit(UiState.Success(stories))
         } catch (e: Exception) {
             emit(UiState.Error(e.message.toString()))

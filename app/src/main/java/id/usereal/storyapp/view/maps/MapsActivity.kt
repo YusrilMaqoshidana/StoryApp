@@ -10,12 +10,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,31 +25,54 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import id.usereal.storyapp.R
+import id.usereal.storyapp.data.UiState
+import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.databinding.ActivityMapsBinding
+import id.usereal.storyapp.view.ViewModelFactory
 
-@Suppress("DEPRECATION")
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private val viewModel: MapsViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
+    private var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-        supportActionBar?.apply {
-            title = "Maps"
-            titleColor = getColor(R.color.white)
-            setDisplayHomeAsUpEnabled(true) // Tombol Back (opsional)
-        }
+
+        setupToolbar()
+        getTokenAndObserveLocation()
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.apply {
+            title = "Maps"
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun getTokenAndObserveLocation() {
+        intent.getStringExtra(EXTRA_TOKEN)?.let { tokenValue ->
+            token = tokenValue
+            observeLocation(token)
+        } ?: run {
+            showSnackbar("Token tidak ditemukan")
+            finish()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -76,37 +99,72 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap = googleMap
-        mMap.setOnMapLongClickListener { latLng ->
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(latLng)
-                    .title("Person")
-                    .snippet("Lat: ${latLng.latitude} Long: ${latLng.longitude}")
-                    .icon(vectorToBitmap(R.drawable.ic_person, Color.parseColor("#EC221F")))
-            )
-        }
-        mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.uiSettings.isIndoorLevelPickerEnabled = true
-        mMap.uiSettings.isCompassEnabled = true
-        mMap.uiSettings.isMapToolbarEnabled = true
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        setupMapSettings()
         getMyLocation()
         setMapStyle()
+    }
+
+    private fun setupMapSettings() {
+        mMap.apply {
+            uiSettings.isZoomControlsEnabled = true
+            uiSettings.isIndoorLevelPickerEnabled = true
+            uiSettings.isCompassEnabled = true
+            uiSettings.isMapToolbarEnabled = true
+
+        }
+    }
+
+    private fun observeLocation(token: String) {
+        viewModel.getStoryWithLocation(token).observe(this) { location ->
+            when(location) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = android.view.View.VISIBLE
+                }
+                is UiState.Success -> {
+                    binding.progressBar.visibility = android.view.View.GONE
+                    val data = location.data
+                    addStoryMarkers(data)
+                    Log.d("TestData", "Data: $data")
+                }
+                is UiState.Error -> {
+                    binding.progressBar.visibility = android.view.View.GONE
+                    showSnackbar(getString(R.string.error_fetching_stories, location.error))
+                }
+            }
+        }
+    }
+
+    private fun addStoryMarkers(stories: List<ListStoryItem>) {
+        stories.forEach { story ->
+            story.lat?.let { lat ->
+                story.lon?.let { lon ->
+                    val latLng = LatLng(lat, lon)
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(story.name)
+                            .snippet(story.description)
+                            .icon(vectorToBitmap(R.drawable.ic_person, Color.parseColor("#EC221F")))
+                    )
+                }
+            }
+        }
+
+        // Move camera to first story location if exists
+        stories.firstOrNull()?.let { story ->
+            if (story.lat != null && story.lon != null) {
+                val firstLocation = LatLng(story.lat, story.lon)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLocation, 10f))
+            }
+        }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     private val requestPermissionLauncher =
@@ -117,6 +175,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 getMyLocation()
             }
         }
+
     private fun getMyLocation() {
         if (ContextCompat.checkSelfPermission(
                 this.applicationContext,
@@ -128,6 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
     private fun setMapStyle() {
         try {
             val success =
@@ -139,7 +199,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.e(TAG, "Can't find style. Error: ", exception)
         }
     }
+
     companion object {
+        const val EXTRA_TOKEN = "token"
         private const val TAG = "MapsActivity"
     }
 }

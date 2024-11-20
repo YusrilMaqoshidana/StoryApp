@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var mainAdapter: MainAdapter
+    private var userToken: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.maps -> {
-                startActivity(Intent(this, MapsActivity::class.java))
+                moveToMaps(userToken)
                 true
             }
             else -> {
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             } else {
+                userToken = user.token
                 observeStory(user.token)
                 binding.fab.setOnClickListener {
                     moveToAddStory(user.token)
@@ -99,6 +101,13 @@ class MainActivity : AppCompatActivity() {
     private fun moveToAddStory(token: String) {
         val intent = Intent(this, AddStoryActivity::class.java).apply {
             putExtra(AddStoryActivity.EXTRA_TOKEN, token)
+        }
+        startActivity(intent)
+    }
+
+    private fun moveToMaps(token: String) {
+        val intent = Intent(this, MapsActivity::class.java).apply {
+            putExtra(MapsActivity.EXTRA_TOKEN, token)
         }
         startActivity(intent)
     }
