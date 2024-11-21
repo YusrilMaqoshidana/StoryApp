@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -103,4 +104,13 @@ dependencies {
 
     // Paging
     implementation(libs.androidx.paging.runtime.ktx)
+
+    // Testing Paging
+    androidTestImplementation(libs.androidx.core.testing) //InstantTaskExecutorRule
+    androidTestImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+
+    testImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    testImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
 }

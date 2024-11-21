@@ -42,8 +42,8 @@
     <string name="image_capture_failed">Image capture failed</string>
     <string name="no_media_selected">No media selected</string>
     <string name="error_getting_image_uri">Error getting image URI</string>
-    <string name="title_activity_maps">MapsActivity</string>
     <string name="map">Map</string>
     <string name="retry">retry</string>
+    <string name="location">Location</string>
 
 </resources>

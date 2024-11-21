@@ -61,7 +61,7 @@ class MainAdapter(
     companion object {
         const val EXTRA_STORY_ID = "story_id"
         const val EXTRA_TOKEN = "token"
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem.id == newItem.id
             }
