@@ -38,16 +38,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val viewModel: MapsViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
-    private var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupToolbar()
-        getTokenAndObserveLocation()
-
+        observeLocation()
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -62,15 +59,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getTokenAndObserveLocation() {
-        intent.getStringExtra(EXTRA_TOKEN)?.let { tokenValue ->
-            token = tokenValue
-            observeLocation(token)
-        } ?: run {
-            showSnackbar(getString(R.string.token_not_found))
-            finish()
-        }
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -115,8 +103,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun observeLocation(token: String) {
-        viewModel.getStoryWithLocation(token).observe(this) { location ->
+    private fun observeLocation() {
+        viewModel.getStoryWithLocation().observe(this) { location ->
             when(location) {
                 is UiState.Loading -> {
                     binding.progressBar.visibility = android.view.View.VISIBLE
@@ -196,7 +184,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    companion object {
-        const val EXTRA_TOKEN = "token"
-    }
 }

@@ -10,12 +10,11 @@ import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.model.UserModel
 import id.usereal.storyapp.data.repository.StoryRepository
 import id.usereal.storyapp.data.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val storyRepository: StoryRepository, private val userRepository: UserRepository) : ViewModel() {
 
-    fun getSession(): Flow<UserModel> {
+    fun getSession(): LiveData<UserModel> {
         return userRepository.getSession()
     }
 

@@ -2,11 +2,13 @@ package id.usereal.storyapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import id.usereal.storyapp.data.local.preference.UserPreference
 import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.remote.ApiService
+import kotlinx.coroutines.flow.first
 
 @Suppress("unused")
-class StoryPagingSource(private val apiService: ApiService) :
+class StoryPagingSource(private val apiService: ApiService, private val userPreference: UserPreference) :
     PagingSource<Int, ListStoryItem>() {
 
     private companion object {
@@ -18,7 +20,8 @@ class StoryPagingSource(private val apiService: ApiService) :
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val locationMode = params.key ?: LOCATION
-            val response = apiService.getStories(position, params.loadSize, locationMode)
+            val token = userPreference.getSession().first().token
+            val response = apiService.getStories(token, position, params.loadSize, locationMode)
 
             if (response.isSuccessful) {
                 val responseData = response.body()!!.listStory

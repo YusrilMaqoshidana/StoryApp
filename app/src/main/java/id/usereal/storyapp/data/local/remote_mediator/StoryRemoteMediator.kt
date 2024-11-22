@@ -5,14 +5,17 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import id.usereal.storyapp.data.local.preference.UserPreference
 import id.usereal.storyapp.data.local.room.StoryRoomDatabase
 import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.remote.ApiService
+import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPagingApi::class)
 class StoryRemoteMediator(
     private val database: StoryRoomDatabase,
     private val apiService: ApiService,
+    private val userPreference: UserPreference
 ) : RemoteMediator<Int, ListStoryItem>() {
 
     private companion object {
@@ -49,7 +52,8 @@ class StoryRemoteMediator(
         }
 
         try {
-            val response = apiService.getStories(page, state.config.pageSize, 0)
+            val token = userPreference.getSession().first().token
+            val response = apiService.getStories(token ,page, state.config.pageSize, 0)
             val responseData = response.body()?.listStory ?: emptyList()
             val endOfPaginationReached = responseData.isEmpty()
 

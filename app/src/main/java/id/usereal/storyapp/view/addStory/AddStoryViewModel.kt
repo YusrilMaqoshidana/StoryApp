@@ -10,9 +10,9 @@ class AddStoryViewModel(private val storyRepository: StoryRepository) : ViewMode
     var currentImageUri: Uri? = null
      var currentLocation: Location? = null
 
-    fun uploadImage(file: File, description: String, token: String, lat: String? = null,
+    fun uploadImage(file: File, description: String, lat: String? = null,
                     lon: String? = null) =
-        storyRepository.uploadImage(file, description, token, lat, lon)
+        storyRepository.uploadImage(file, description, lat, lon)
 
 
 }

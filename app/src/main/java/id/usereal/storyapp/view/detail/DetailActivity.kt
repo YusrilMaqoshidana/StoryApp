@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import id.usereal.storyapp.R
+import id.usereal.storyapp.data.UiState
+import id.usereal.storyapp.data.model.Story
 import id.usereal.storyapp.databinding.ActivityDetailBinding
 import id.usereal.storyapp.utils.formatDate
 
@@ -24,47 +26,60 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val storyId = intent.getStringExtra(EXTRA_STORY_ID)
-        val token = intent.getStringExtra(EXTRA_TOKEN)
         if (storyId.isNullOrEmpty()) {
             showErrorAndFinish()
             return
         }
-        viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
-        token?.let { viewModel.getStoryById(it, storyId) }
+
         setupToolbar()
-        setupObservers()
+        initializeViewModel()
+        observeStoryDetail(storyId)
     }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = getString(R.string.add_story)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = getString(R.string.add_story)
+            setDisplayHomeAsUpEnabled(true)
+        }
         binding.toolbar.navigationIcon?.setTint(Color.WHITE)
     }
 
-    private fun setupObservers() {
-        viewModel.story.observe(this) { story ->
-            with(binding){
-                tvDetailName.text = story?.name
-                tvDetailDescription.text = story?.description
-                Glide.with(this@DetailActivity)
-                    .load(story?.photoUrl)
-                    .into(ivDetailPhoto)
-                dateTextView.text = formatDate(story?.createdAt ?: "null")
+    private fun initializeViewModel() {
+        viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
+    }
+
+    private fun observeStoryDetail(storyId: String) {
+        viewModel.detailStory(storyId).observe(this) { state ->
+            when (state) {
+                is UiState.Loading -> toggleLoading(true)
+                is UiState.Success -> displayStoryDetails(state.data!!)
+                is UiState.Error -> showSnackbar(state.error)
             }
         }
-        viewModel.isLoading.observe(this) { isLoading ->
-            with(binding){
-                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                tvDetailName.visibility = if (isLoading) View.GONE else View.VISIBLE
-                tvDetailDescription.visibility = if (isLoading) View.GONE else View.VISIBLE
-                ivDetailPhoto.visibility = if (isLoading) View.GONE else View.VISIBLE
-                dateTextView.visibility = if (isLoading) View.GONE else View.VISIBLE
-            }
+    }
+
+    private fun toggleLoading(isLoading: Boolean) {
+        with(binding) {
+            val visibility = if (isLoading) View.GONE else View.VISIBLE
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            tvDetailName.visibility = visibility
+            tvDetailDescription.visibility = visibility
+            ivDetailPhoto.visibility = visibility
+            dateTextView.visibility = visibility
         }
-        viewModel.error.observe(this) { error ->
-            showSnackbar(error ?: getString(R.string.unknown_error))
+    }
+
+    private fun displayStoryDetails(story: Story) {
+        with(binding) {
+            tvDetailName.text = story.name
+            tvDetailDescription.text = story.description
+            dateTextView.text = formatDate(story.createdAt ?: "null")
+            Glide.with(this@DetailActivity)
+                .load(story.photoUrl)
+                .into(ivDetailPhoto)
         }
+        toggleLoading(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -88,6 +103,5 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_STORY_ID = "story_id"
-        const val EXTRA_TOKEN = "token"
     }
 }

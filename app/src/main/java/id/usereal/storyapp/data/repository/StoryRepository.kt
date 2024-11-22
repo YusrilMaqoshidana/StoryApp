@@ -10,13 +10,14 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.google.gson.Gson
 import id.usereal.storyapp.data.UiState
+import id.usereal.storyapp.data.local.preference.UserPreference
 import id.usereal.storyapp.data.local.remote_mediator.StoryRemoteMediator
 import id.usereal.storyapp.data.local.room.StoryRoomDatabase
 import id.usereal.storyapp.data.model.FileUploadResponse
 import id.usereal.storyapp.data.model.ListStoryItem
-import id.usereal.storyapp.data.remote.ApiConfig.getApiService
 import id.usereal.storyapp.data.remote.ApiService
 import id.usereal.storyapp.utils.EspressoIdlingResource
+import kotlinx.coroutines.flow.first
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -28,7 +29,8 @@ import java.io.File
 
 class StoryRepository(
     private val apiService: ApiService,
-    private val storyRoomDatabase: StoryRoomDatabase
+    private val storyRoomDatabase: StoryRoomDatabase,
+    private val userPreference: UserPreference
 ) {
     @OptIn(ExperimentalPagingApi::class)
     fun getAllStories(): LiveData<PagingData<ListStoryItem>> {
@@ -37,16 +39,17 @@ class StoryRepository(
                 pageSize = 5,
                 enablePlaceholders = false
             ),
-            remoteMediator = StoryRemoteMediator(storyRoomDatabase, apiService),
+            remoteMediator = StoryRemoteMediator(storyRoomDatabase, apiService, userPreference),
             pagingSourceFactory = { storyRoomDatabase.storyDao().getAllStory() }
         ).liveData
     }
 
 
-    fun getStoryWithLocation(token: String): LiveData<UiState<List<ListStoryItem>>> = liveData {
+    fun getStoryWithLocation(): LiveData<UiState<List<ListStoryItem>>> = liveData {
         emit(UiState.Loading)
         try {
-            val response = getApiService(token).getStoriesWithLocation()
+            val token = userPreference.getSession().first().token
+            val response = apiService.getStoriesWithLocation(token)
             val stories = response.listStory
             Log.d("TestData", "Data: $stories")
             emit(UiState.Success(stories))
@@ -55,7 +58,19 @@ class StoryRepository(
         }
     }
 
-    fun uploadImage(imageFile: File, description: String, token: String, lat: String? = null, lon: String? = null) = liveData {
+    fun getDetailStory(storyId: String) = liveData {
+        emit(UiState.Loading)
+        try {
+            val token = userPreference.getSession().first().token
+            val response = apiService.getDetailStory(token, storyId)
+            val story = response.story
+            emit(UiState.Success(story))
+        } catch (e: Exception) {
+            emit(UiState.Error(e.message.toString()))
+        }
+    }
+
+    fun uploadImage(imageFile: File, description: String, lat: String? = null, lon: String? = null) = liveData {
         emit(UiState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -68,7 +83,8 @@ class StoryRepository(
         )
         EspressoIdlingResource.increment()
         try {
-            val successResponse = getApiService(token).uploadImage(multipartBody, requestBody, latBody, lonBody)
+            val token = userPreference.getSession().first().token
+            val successResponse = apiService.uploadImage( token ,multipartBody, requestBody, latBody, lonBody)
             emit(UiState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
@@ -80,14 +96,17 @@ class StoryRepository(
 
     }
 
+
+
     companion object {
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
             storyRoomDatabase: StoryRoomDatabase,
-            apiService: ApiService
+            apiService: ApiService,
+            userPreference: UserPreference
         ): StoryRepository = instance ?: synchronized(this) {
-            instance ?: StoryRepository(apiService, storyRoomDatabase)
+            instance ?: StoryRepository(apiService, storyRoomDatabase, userPreference)
         }.also { instance = it }
     }
 }

@@ -2,6 +2,7 @@ package id.usereal.storyapp.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -27,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var adapter: MainAdapter
-    private var currentToken: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +42,30 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.story)
     }
 
+
+    private fun observeSession() {
+
+        viewModel.getSession().observe(this) { user ->
+            when (user.isLogin && user.token.isNotEmpty()) {
+                false -> {
+                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    finish()
+                }
+                true -> {
+                    setupAdapter(user.token)
+                    binding.fab.setOnClickListener {
+                        moveToAddStory()
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupAdapter(token: String) {
         adapter = MainAdapter(this, token)
+        viewModel.stories.observe(this) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
+        }
         binding.rvStory.adapter = adapter.withLoadStateFooter(
             footer = LoadingStateAdapter { adapter.retry() }
         )
@@ -54,46 +76,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeSession() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getSession().collect { user ->
-                    when (user.isLogin && user.token.isNotEmpty()) {
-                        false -> {
-                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                            finish()
-                        }
-                        true -> {
-                            currentToken = user.token
-                            setupAdapter(currentToken)
-                            binding.fab.setOnClickListener {
-                                moveToAddStory()
-                            }
-                            observeStories()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeStories() {
-        viewModel.stories.observe(this) { pagingData ->
-            adapter.submitData(lifecycle, pagingData)
-        }
-    }
-
     private fun moveToAddStory() {
-        val intent = Intent(this, AddStoryActivity::class.java).apply {
-            putExtra(AddStoryActivity.EXTRA_TOKEN, currentToken)
-        }
+        val intent = Intent(this, AddStoryActivity::class.java)
         startActivity(intent)
     }
 
     private fun moveToMaps() {
-        val intent = Intent(this, MapsActivity::class.java).apply {
-            putExtra(MapsActivity.EXTRA_TOKEN, currentToken)
-        }
+        val intent = Intent(this, MapsActivity::class.java)
         startActivity(intent)
     }
 
@@ -108,10 +97,12 @@ class MainActivity : AppCompatActivity() {
                 viewModel.logout()
                 true
             }
+
             R.id.maps -> {
                 moveToMaps()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

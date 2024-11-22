@@ -29,7 +29,6 @@ import id.usereal.storyapp.databinding.ActivityAddStoryBinding
 import id.usereal.storyapp.utils.reduceFileImage
 import id.usereal.storyapp.utils.uriToFile
 import id.usereal.storyapp.view.ViewModelFactory
-import id.usereal.storyapp.view.detail.DetailActivity
 import id.usereal.storyapp.view.main.MainActivity
 
 @Suppress("KotlinConstantConditions")
@@ -94,12 +93,11 @@ class AddStoryActivity : AppCompatActivity() {
             setupInitialLocationAndUI()
         }
         setupToolbar()
-        val token = intent.getStringExtra(DetailActivity.EXTRA_TOKEN)
 
         with(binding) {
             btnGallery.setOnClickListener { startGallery() }
             btnCamera.setOnClickListener { startCamera() }
-            buttonAdd.setOnClickListener { token?.let { it1 -> uploadImage(it1) } }
+            buttonAdd.setOnClickListener { uploadImage()  }
             checkBox.setOnClickListener {
                 if (checkBox.isChecked) {
                     getLastLocation()
@@ -136,12 +134,10 @@ class AddStoryActivity : AppCompatActivity() {
             .start()
     }
 
-    // Memulai galeri untuk memilih gambar
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-    // Memulai kamera untuk mengambil foto
     private fun startCamera() {
         viewModel.currentImageUri = getImageUri(this)
         viewModel.currentImageUri?.let {
@@ -149,8 +145,7 @@ class AddStoryActivity : AppCompatActivity() {
         } ?: getString(R.string.unable_to_create_image_uri).showSnackbar()
     }
 
-    // Upload gambar
-    private fun uploadImage(token: String) {
+    private fun uploadImage() {
         viewModel.currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             val description = binding.edAddDescription.text.toString()
@@ -160,7 +155,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (description.isEmpty()) {
                 binding.edAddDescription.error = getString(R.string.error_description_null)
             } else {
-                viewModel.uploadImage(imageFile, description, token, lat, lon).observe(this) { result ->
+                viewModel.uploadImage(imageFile, description, lat, lon).observe(this) { result ->
                     if (result != null) {
                         when (result) {
                             is UiState.Loading -> {
@@ -184,30 +179,25 @@ class AddStoryActivity : AppCompatActivity() {
         } ?: getString(R.string.error_getting_image_uri).showSnackbar()
     }
 
-    // Menampilkan gambar yang dipilih atau diambil
     private fun showImage() {
         viewModel.currentImageUri?.let {
             binding.ivPreview.setImageURI(it)
         }
     }
 
-    // Menampilkan pesan Snackbar
     private fun String.showSnackbar() {
         Snackbar.make(binding.root, this, Snackbar.LENGTH_LONG).show()
     }
 
-    // Menampilkan loading
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    // Berpindah ke MainActivity
     private fun moveToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
-    // Membuat URI untuk gambar yang akan diambil
     private fun getImageUri(context: Context): Uri {
         val contentValues = ContentValues().apply {
             put(MediaStore.Images.Media.TITLE, getString(R.string.new_image))
@@ -219,7 +209,6 @@ class AddStoryActivity : AppCompatActivity() {
         ) ?: throw IllegalStateException(getString(R.string.failed_to_create_new_image_uri))
     }
 
-    // Memeriksa semua permission yang diperlukan
     private fun hasAllPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
@@ -235,7 +224,6 @@ class AddStoryActivity : AppCompatActivity() {
                         ) == PackageManager.PERMISSION_GRANTED)
     }
 
-    // Meminta semua permission sekaligus
     private fun requestAllPermissions() {
         multiplePermissionsLauncher.launch(
             arrayOf(
@@ -267,13 +255,11 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    // Menangani error permission lokasi
     private fun handleLocationPermissionError() {
         getString(R.string.location_permission_denied).showSnackbar()
         binding.checkBox.isChecked = false
     }
 
-    // Handle tombol kembali di toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -288,6 +274,5 @@ class AddStoryActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUIRED_CAMERA_PERMISSION = Manifest.permission.CAMERA
-        const val EXTRA_TOKEN = "token"
     }
 }

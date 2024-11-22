@@ -1,6 +1,7 @@
 package id.usereal.storyapp.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import id.usereal.storyapp.data.UiState
 import id.usereal.storyapp.data.local.preference.UserPreference
@@ -76,8 +77,8 @@ class UserRepository private constructor(
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user.copy(isLogin = true))
     }
-    fun getSession(): Flow<UserModel> {
-        return userPreference.getSession()
+    fun getSession(): LiveData<UserModel> {
+        return userPreference.getSession().asLiveData()
     }
     suspend fun logout() {
         userPreference.logout()
