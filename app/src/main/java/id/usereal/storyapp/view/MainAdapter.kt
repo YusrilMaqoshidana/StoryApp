@@ -2,6 +2,7 @@ package id.usereal.storyapp.view
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -14,7 +15,6 @@ import id.usereal.storyapp.view.detail.DetailActivity
 
 class MainAdapter(
     private val context: Context,
-    private val token: String
 ) : PagingDataAdapter<ListStoryItem, MainAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
     inner class StoryViewHolder(private val binding: ItemCardStoryBinding) :
@@ -32,8 +32,8 @@ class MainAdapter(
 
                 itemView.setOnClickListener {
                     val intent = Intent(context, DetailActivity::class.java).apply {
-                        putExtra(EXTRA_TOKEN, token)
                         putExtra(EXTRA_STORY_ID, story.id)
+                        Log.d("TokenTesting", "Data story id: ${story.id}")
                     }
                     context.startActivity(intent)
                 }
@@ -59,7 +59,6 @@ class MainAdapter(
 
     companion object {
         const val EXTRA_STORY_ID = "story_id"
-        const val EXTRA_TOKEN = "token"
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem.id == newItem.id

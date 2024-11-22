@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -66,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 finish()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -105,20 +107,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun observeLocation() {
         viewModel.getStoryWithLocation().observe(this) { location ->
-            when(location) {
+            when (location) {
                 is UiState.Loading -> {
                     binding.progressBar.visibility = android.view.View.VISIBLE
                 }
+
                 is UiState.Success -> {
                     binding.progressBar.visibility = android.view.View.GONE
                     val data = location.data
                     addStoryMarkers(data)
                 }
+
                 is UiState.Error -> {
                     binding.progressBar.visibility = android.view.View.GONE
                     showSnackbar(getString(R.string.error_fetching_stories, location.error))
                 }
             }
+            Log.d("TokenTesting", "Data Maps story: $location")
         }
     }
 

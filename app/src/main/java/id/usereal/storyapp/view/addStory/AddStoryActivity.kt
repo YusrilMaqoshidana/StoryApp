@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -101,10 +100,8 @@ class AddStoryActivity : AppCompatActivity() {
             checkBox.setOnClickListener {
                 if (checkBox.isChecked) {
                     getLastLocation()
-                    Log.d("TestCheckbox", "Centang")
                 } else {
                     viewModel.currentLocation = null
-                    Log.d("TestCheckbox", "Tidak Centang")
                 }
             }
             // Implementasi Animasi

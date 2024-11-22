@@ -9,7 +9,6 @@ import id.usereal.storyapp.data.model.LoginResponse
 import id.usereal.storyapp.data.model.RegisterResponse
 import id.usereal.storyapp.data.model.UserModel
 import id.usereal.storyapp.data.remote.ApiService
-import kotlinx.coroutines.flow.Flow
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 

@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import id.usereal.storyapp.R
@@ -14,11 +14,13 @@ import id.usereal.storyapp.data.UiState
 import id.usereal.storyapp.data.model.Story
 import id.usereal.storyapp.databinding.ActivityDetailBinding
 import id.usereal.storyapp.utils.formatDate
+import id.usereal.storyapp.view.ViewModelFactory
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var viewModel: DetailViewModel
-
+    private val viewModel: DetailViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,7 +34,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         setupToolbar()
-        initializeViewModel()
         observeStoryDetail(storyId)
     }
 
@@ -43,10 +44,6 @@ class DetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
         binding.toolbar.navigationIcon?.setTint(Color.WHITE)
-    }
-
-    private fun initializeViewModel() {
-        viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
     }
 
     private fun observeStoryDetail(storyId: String) {

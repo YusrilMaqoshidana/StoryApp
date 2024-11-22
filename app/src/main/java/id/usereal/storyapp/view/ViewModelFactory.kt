@@ -8,6 +8,7 @@ import id.usereal.storyapp.data.repository.UserRepository
 import id.usereal.storyapp.di.Injection.provideStoryRepository
 import id.usereal.storyapp.di.Injection.provideUserRepository
 import id.usereal.storyapp.view.addStory.AddStoryViewModel
+import id.usereal.storyapp.view.detail.DetailViewModel
 import id.usereal.storyapp.view.login.LoginViewModel
 import id.usereal.storyapp.view.main.MainViewModel
 import id.usereal.storyapp.view.maps.MapsViewModel
@@ -35,6 +36,9 @@ class ViewModelFactory private constructor(
             }
             modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
                 MapsViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
+                DetailViewModel(storyRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

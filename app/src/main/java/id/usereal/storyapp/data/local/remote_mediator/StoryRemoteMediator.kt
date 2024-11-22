@@ -50,13 +50,12 @@ class StoryRemoteMediator(
                 nextKey
             }
         }
-
         try {
-            val token = userPreference.getSession().first().token
+            val pref = userPreference.getSession().first().token
+            val token = "Bearer $pref"
             val response = apiService.getStories(token ,page, state.config.pageSize, 0)
             val responseData = response.body()?.listStory ?: emptyList()
             val endOfPaginationReached = responseData.isEmpty()
-
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys()
@@ -68,7 +67,6 @@ class StoryRemoteMediator(
                     RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.remoteKeysDao().insertAllKeys(keys)
-
                 database.storyDao().insertAllStory(responseData)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

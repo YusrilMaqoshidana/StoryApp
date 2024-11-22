@@ -2,15 +2,11 @@ package id.usereal.storyapp.view.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import id.usereal.storyapp.R
 import id.usereal.storyapp.databinding.ActivityMainBinding
@@ -20,7 +16,6 @@ import id.usereal.storyapp.view.ViewModelFactory
 import id.usereal.storyapp.view.addStory.AddStoryActivity
 import id.usereal.storyapp.view.login.LoginActivity
 import id.usereal.storyapp.view.maps.MapsActivity
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -31,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observeSession()
+        checkSession()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
@@ -43,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun observeSession() {
+    private fun checkSession() {
 
         viewModel.getSession().observe(this) { user ->
             when (user.isLogin && user.token.isNotEmpty()) {
@@ -52,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
                 true -> {
-                    setupAdapter(user.token)
+                    setupAdapter()
                     binding.fab.setOnClickListener {
                         moveToAddStory()
                     }
@@ -61,8 +56,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAdapter(token: String) {
-        adapter = MainAdapter(this, token)
+    private fun setupAdapter() {
+        adapter = MainAdapter(this)
         viewModel.stories.observe(this) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
         }

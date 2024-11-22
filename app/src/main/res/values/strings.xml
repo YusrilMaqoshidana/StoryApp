@@ -32,7 +32,6 @@
     <string name="error_description_null">Error cannot be empty</string>
     <string name="empty_story">empty story</string>
     <string name="error_fetching_stories">Error fetching stories: %1$s</string>
-    <string name="unknown_error">Unknown error</string>
     <string name="story_id_not_found">Story ID not found</string>
     <string name="failed_to_create_new_image_uri">Failed to create new image URI</string>
     <string name="permission_request_granted">Permission request granted</string>
@@ -43,7 +42,6 @@
     <string name="map">Map</string>
     <string name="retry">retry</string>
     <string name="location">Location</string>
-    <string name="token_not_found">Token not found</string>
     <string name="maps">Maps</string>
     <string name="style_parsing_failed">Style parsing failed.</string>
     <string name="can_t_find_style_error">Can\'t find style. Error: %1$s</string>

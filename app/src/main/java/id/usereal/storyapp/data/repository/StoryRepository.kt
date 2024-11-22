@@ -1,6 +1,5 @@
 package id.usereal.storyapp.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.ExperimentalPagingApi
@@ -48,10 +47,10 @@ class StoryRepository(
     fun getStoryWithLocation(): LiveData<UiState<List<ListStoryItem>>> = liveData {
         emit(UiState.Loading)
         try {
-            val token = userPreference.getSession().first().token
+            val pref = userPreference.getSession().first().token
+            val token = "Bearer $pref"
             val response = apiService.getStoriesWithLocation(token)
             val stories = response.listStory
-            Log.d("TestData", "Data: $stories")
             emit(UiState.Success(stories))
         } catch (e: Exception) {
             emit(UiState.Error(e.message.toString()))
@@ -61,7 +60,8 @@ class StoryRepository(
     fun getDetailStory(storyId: String) = liveData {
         emit(UiState.Loading)
         try {
-            val token = userPreference.getSession().first().token
+            val pref = userPreference.getSession().first().token
+            val token = "Bearer $pref"
             val response = apiService.getDetailStory(token, storyId)
             val story = response.story
             emit(UiState.Success(story))
@@ -83,7 +83,8 @@ class StoryRepository(
         )
         EspressoIdlingResource.increment()
         try {
-            val token = userPreference.getSession().first().token
+            val pref = userPreference.getSession().first().token
+            val token = "Bearer $pref"
             val successResponse = apiService.uploadImage( token ,multipartBody, requestBody, latBody, lonBody)
             emit(UiState.Success(successResponse))
         } catch (e: HttpException) {
