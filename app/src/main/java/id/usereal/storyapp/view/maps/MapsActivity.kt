@@ -5,14 +5,13 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -57,7 +56,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
-            title = "Maps"
+            title = getString(R.string.maps)
             setHomeAsUpIndicator(R.drawable.ic_arrow_back)
             setDisplayHomeAsUpEnabled(true)
         }
@@ -68,7 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             token = tokenValue
             observeLocation(token)
         } ?: run {
-            showSnackbar("Token tidak ditemukan")
+            showSnackbar(getString(R.string.token_not_found))
             finish()
         }
     }
@@ -85,9 +84,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun vectorToBitmap(@DrawableRes id: Int, @ColorInt color: Int): BitmapDescriptor {
         val vectorDrawable = ResourcesCompat.getDrawable(resources, id, null)
-        if (vectorDrawable == null) {
-            return BitmapDescriptorFactory.defaultMarker()
-        }
+            ?: return BitmapDescriptorFactory.defaultMarker()
         val bitmap = Bitmap.createBitmap(
             vectorDrawable.intrinsicWidth,
             vectorDrawable.intrinsicHeight,
@@ -128,7 +125,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     binding.progressBar.visibility = android.view.View.GONE
                     val data = location.data
                     addStoryMarkers(data)
-                    Log.d("TestData", "Data: $data")
                 }
                 is UiState.Error -> {
                     binding.progressBar.visibility = android.view.View.GONE
@@ -193,15 +189,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val success =
                 mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
             if (!success) {
-                Log.e(TAG, "Style parsing failed.")
+                showSnackbar(getString(R.string.style_parsing_failed))
             }
         } catch (exception: Resources.NotFoundException) {
-            Log.e(TAG, "Can't find style. Error: ", exception)
+            showSnackbar(getString(R.string.can_t_find_style_error, exception))
         }
     }
 
     companion object {
         const val EXTRA_TOKEN = "token"
-        private const val TAG = "MapsActivity"
     }
 }

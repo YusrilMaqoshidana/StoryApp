@@ -16,7 +16,9 @@ import id.usereal.storyapp.data.model.FileUploadResponse
 import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.remote.ApiConfig.getApiService
 import id.usereal.storyapp.data.remote.ApiService
+import id.usereal.storyapp.utils.EspressoIdlingResource
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,7 +34,7 @@ class StoryRepository(
     fun getAllStories(): LiveData<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             remoteMediator = StoryRemoteMediator(storyRoomDatabase, apiService),
@@ -53,22 +55,27 @@ class StoryRepository(
         }
     }
 
-    fun uploadImage(imageFile: File, description: String, token: String) = liveData {
+    fun uploadImage(imageFile: File, description: String, token: String, lat: String? = null, lon: String? = null) = liveData {
         emit(UiState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val latBody = lat?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lonBody = lon?.toRequestBody("text/plain".toMediaTypeOrNull())
         val multipartBody = MultipartBody.Part.createFormData(
             "photo",
             imageFile.name,
-            requestImageFile
+            requestImageFile,
         )
+        EspressoIdlingResource.increment()
         try {
-            val successResponse = getApiService(token).uploadImage(multipartBody, requestBody)
+            val successResponse = getApiService(token).uploadImage(multipartBody, requestBody, latBody, lonBody)
             emit(UiState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
             emit(errorResponse.message?.let { UiState.Error(it) })
+        } finally {
+            EspressoIdlingResource.decrement()
         }
 
     }

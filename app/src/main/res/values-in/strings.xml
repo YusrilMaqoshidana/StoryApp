@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AplikasiCerita</string>
+    <string name="app_name">StoryApp</string>
     <string name="user_name">Judul</string>
     <string name="description">Deskripsi</string>
     <string name="story">Cerita</string>
     <string name="add_story">Tambah Cerita</string>
-    <string name="add_icon">tambahkan ikon</string>
-    <string name="error_email">Email tidak sesuai</string>
+    <string name="add_icon">Tambah Ikon</string>
+    <string name="error_email">Kesalahan email tidak cocok</string>
     <string name="email">Email</string>
-    <string name="error_password">Kata sandi harus minimal 8 karakter</string>
+    <string name="error_password">Kesalahan, kata sandi harus minimal 8 karakter</string>
     <string name="password">Kata Sandi</string>
     <string name="username">Nama Pengguna</string>
     <string name="hai_login">Hai! 👋</string>
@@ -22,29 +21,36 @@
     <string name="login_register">Daftar</string>
     <string name="don_t_have_an_account">Belum punya akun?</string>
     <string name="login_succes">Berhasil Masuk</string>
-    <string name="register_succes">Berhasil Mendaftar</string>
+    <string name="register_succes">Berhasil Daftar</string>
     <string name="logout">Keluar</string>
     <string name="imagedetail">Detail Gambar</string>
-    <string name="author_name">nama penulis</string>
-    <string name="createdat">dibuat pada</string>
+    <string name="author_name">Nama Penulis</string>
+    <string name="createdat">Dibuat pada</string>
     <string name="camera">Kamera</string>
     <string name="gallery">Galeri</string>
     <string name="uploud">Unggah</string>
-    <string name="error_description_null">Tidak boleh kosong</string>
-    <string name="empty_story">cerita kosong</string>
-    <string name="stories_fetched_successfully">Cerita berhasil diambil</string>
+    <string name="error_description_null">Kesalahan tidak boleh kosong</string>
+    <string name="empty_story">Cerita kosong</string>
     <string name="error_fetching_stories">Kesalahan mengambil cerita: %1$s</string>
     <string name="unknown_error">Kesalahan tidak diketahui</string>
-    <string name="story_id_not_found">ID Cerita tidak ditemukan</string>
+    <string name="story_id_not_found">ID cerita tidak ditemukan</string>
     <string name="failed_to_create_new_image_uri">Gagal membuat URI gambar baru</string>
-    <string name="permission_request_granted">Permintaan izin diterima</string>
-    <string name="permission_request_denied">Permintaan izin ditolak</string>
+    <string name="permission_request_granted">Izin permintaan diberikan</string>
     <string name="unable_to_create_image_uri">Tidak dapat membuat URI gambar</string>
-    <string name="image_capture_failed">Gagal menangkap gambar</string>
+    <string name="image_capture_failed">Gagal mengambil gambar</string>
     <string name="no_media_selected">Tidak ada media yang dipilih</string>
     <string name="error_getting_image_uri">Kesalahan mendapatkan URI gambar</string>
     <string name="map">Peta</string>
-    <string name="retry">Coba Lagi</string>
+    <string name="retry">Coba lagi</string>
     <string name="location">Lokasi</string>
-
+    <string name="token_not_found">Token tidak ditemukan</string>
+    <string name="maps">Peta</string>
+    <string name="style_parsing_failed">Gagal mem-parsing gaya.</string>
+    <string name="can_t_find_style_error">Tidak dapat menemukan gaya. Kesalahan: %1$s</string>
+    <string name="new_image">Gambar Baru</string>
+    <string name="image_from_camera">Gambar dari Kamera</string>
+    <string name="location_permission_denied">Izin Lokasi Ditolak</string>
+    <string name="location_acquired">Lokasi Diperoleh</string>
+    <string name="location_not_found">Lokasi Tidak Ditemukan</string>
+    <string name="camera_permission_denied">Izin camera ditolak</string>
 </resources>

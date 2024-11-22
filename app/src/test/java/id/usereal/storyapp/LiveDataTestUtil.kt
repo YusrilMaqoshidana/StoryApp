@@ -3,9 +3,6 @@ package id.usereal.storyapp
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import org.junit.Test
-
-import org.junit.Assert.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -30,7 +27,6 @@ fun <T> LiveData<T>.getOrAwaitValue(
     try {
         afterObserve.invoke()
 
-        // Don't wait indefinitely if the LiveData is not set.
         if (!latch.await(time, timeUnit)) {
             throw TimeoutException("LiveData value was never set.")
         }

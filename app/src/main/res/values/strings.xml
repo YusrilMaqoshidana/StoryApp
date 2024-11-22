@@ -31,13 +31,11 @@
     <string name="uploud">Uploud</string>
     <string name="error_description_null">Error cannot be empty</string>
     <string name="empty_story">empty story</string>
-    <string name="stories_fetched_successfully">Stories fetched successfully</string>
     <string name="error_fetching_stories">Error fetching stories: %1$s</string>
     <string name="unknown_error">Unknown error</string>
     <string name="story_id_not_found">Story ID not found</string>
     <string name="failed_to_create_new_image_uri">Failed to create new image URI</string>
     <string name="permission_request_granted">Permission request granted</string>
-    <string name="permission_request_denied">Permission request denied</string>
     <string name="unable_to_create_image_uri">Unable to create image URI</string>
     <string name="image_capture_failed">Image capture failed</string>
     <string name="no_media_selected">No media selected</string>
@@ -45,5 +43,14 @@
     <string name="map">Map</string>
     <string name="retry">retry</string>
     <string name="location">Location</string>
-
+    <string name="token_not_found">Token not found</string>
+    <string name="maps">Maps</string>
+    <string name="style_parsing_failed">Style parsing failed.</string>
+    <string name="can_t_find_style_error">Can\'t find style. Error: %1$s</string>
+    <string name="new_image">New Image</string>
+    <string name="image_from_camera">Image from Camera</string>
+    <string name="location_permission_denied">Location Permission Denied</string>
+    <string name="location_acquired">Location Acquired</string>
+    <string name="location_not_found">Location not found</string>
+    <string name="camera_permission_denied">camera permission denied</string>
 </resources>

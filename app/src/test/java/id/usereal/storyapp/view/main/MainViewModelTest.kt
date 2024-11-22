@@ -1,3 +1,5 @@
+@file:Suppress("SameReturnValue")
+
 package id.usereal.storyapp.view.main
 
 import android.util.Log
@@ -22,8 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -112,6 +114,7 @@ class MainViewModelTest{
     }
 }
 
+@Suppress("SameReturnValue")
 class StoryPagingSource : PagingSource<Int, LiveData<List<ListStoryItem>>>() {
     companion object {
         fun snapshot(items: List<ListStoryItem>): PagingData<ListStoryItem> {
@@ -119,7 +122,7 @@ class StoryPagingSource : PagingSource<Int, LiveData<List<ListStoryItem>>>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, LiveData<List<ListStoryItem>>>): Int {
+    override fun getRefreshKey(ignoredState: PagingState<Int, LiveData<List<ListStoryItem>>>): Int {
         return 0
     }
 

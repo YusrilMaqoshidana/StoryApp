@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,15 +29,15 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupBinding()
         // Implementasi Animasi
-        with(binding){
+        with(binding) {
             slideInFromLeft(tvTitle, 1000)
             slideInFromLeft(tvDescription, 1400)
             fadeInAnimation(emailLayout, 2000)
             fadeInAnimation(passwordLayout, 2000)
             fadeInAnimation(btnLogin, 1400)
         }
-
     }
+
     // Animasi untuk elemen-elemen UI
     private fun fadeInAnimation(view: View, duration: Long = 1000) {
         view.alpha = 0f
@@ -47,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
             .setInterpolator(DecelerateInterpolator())
             .start()
     }
+
     // Animasi untuk elemen-elemen UI
     private fun slideInFromLeft(view: View, duration: Long = 1000) {
         view.translationX = -500f
@@ -58,26 +60,28 @@ class LoginActivity : AppCompatActivity() {
             .start()
     }
 
-    private fun setupBinding(){
-        with(binding){
+    private fun setupBinding() {
+        with(binding) {
             edLoginEmail.setParentLayout(emailLayout)
             edLoginPassword.setParentLayout(passwordLayout)
             btnRegister.setOnClickListener {
                 moveToRegister()
             }
-            btnLogin.setOnClickListener{
+            btnLogin.setOnClickListener {
                 setupLogin()
             }
         }
     }
-    private fun setupLogin(){
+
+    private fun setupLogin() {
         val email = binding.edLoginEmail.text.toString()
         val password = binding.edLoginPassword.text.toString()
         viewModel.login(email, password).observeForever {
-            when(it){
+            when (it) {
                 is UiState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 is UiState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     showSnackbar(getString(R.string.login_succes))
@@ -85,23 +89,24 @@ class LoginActivity : AppCompatActivity() {
                     viewModel.saveSession(UserModel(user?.name ?: "", user?.token ?: "", true))
                     moveToMain()
                 }
+
                 is UiState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     showSnackbar(it.error)
                 }
 
-                }
+            }
         }
 
     }
 
-    private fun moveToRegister(){
+    private fun moveToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun moveToMain(){
+    private fun moveToMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

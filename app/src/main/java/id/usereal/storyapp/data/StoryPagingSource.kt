@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import id.usereal.storyapp.data.model.ListStoryItem
 import id.usereal.storyapp.data.remote.ApiService
 
+@Suppress("unused")
 class StoryPagingSource(private val apiService: ApiService) :
     PagingSource<Int, ListStoryItem>() {
 

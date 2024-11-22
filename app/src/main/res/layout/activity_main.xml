@@ -31,12 +31,12 @@
         tools:listitem="@layout/item_card_story" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty_story"
         android:visibility="gone"
-        app:layout_anchorGravity="center" />
+        android:layout_gravity="center"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

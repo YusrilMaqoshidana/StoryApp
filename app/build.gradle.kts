@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -51,6 +53,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -113,4 +118,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
+
+    implementation(libs.androidx.espresso.idling.resource)
+
+    // location
+    implementation (libs.play.services.location)
 }
